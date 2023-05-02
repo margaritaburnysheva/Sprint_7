@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -42,7 +43,7 @@ public class CreateCourierTest {
 
         courierClient.createCourier(courier)
                 .assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .and()
                 .assertThat()
                 .body("ok",is(true));

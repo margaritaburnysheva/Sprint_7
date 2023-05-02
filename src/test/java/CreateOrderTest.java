@@ -17,6 +17,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.List;
 
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 @RunWith(Parameterized.class)
@@ -72,7 +73,7 @@ public class CreateOrderTest {
        response
                 .then()
                 .assertThat()
-                .statusCode(201)
+                .statusCode(SC_CREATED)
                 .and()
                 .body("track",notNullValue());
 

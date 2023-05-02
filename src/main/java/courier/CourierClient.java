@@ -5,7 +5,7 @@ import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
 
-public class CourierClient extends Constants {
+public class CourierClient extends RestClient {
     private static final String CREATE_COURIER_URI="http://qa-scooter.praktikum-services.ru/api/v1/courier";
     @Step("Create courier")
     public ValidatableResponse createCourier(Courier courier) {

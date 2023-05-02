@@ -8,10 +8,12 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -29,6 +31,11 @@ public class LoginCourierTest {
         courierClient=new CourierClient();
     }
 
+    @After
+    public void clearData(){
+        courierClient.deleteCourier(courierId);
+    }
+
     @Test
     @DisplayName("Courier login return 200 and Id")
     @Description("Checking of status code 200 and courier id when login of a courier with valid data")
@@ -38,7 +45,7 @@ public class LoginCourierTest {
 
         courierClient.loginCourier(CourierCredentials.from(courier))
                 .assertThat()
-                .statusCode(200)
+                .statusCode(SC_OK)
                 .and()
                 .assertThat()
                 .body("id",notNullValue());
@@ -47,8 +54,6 @@ public class LoginCourierTest {
                 .assertThat()
                 .body("id",notNullValue())
                 .extract().path("id");
-
-        courierClient.deleteCourier(courierId);
     }
 
     @Test
@@ -59,7 +64,7 @@ public class LoginCourierTest {
 
        courierClient.loginCourier(CourierCredentials.from(courier))
                 .assertThat()
-                .statusCode(404)
+                .statusCode(SC_NOT_FOUND)
                 .and()
                 .assertThat()
                 .body("message", is("Учетная запись не найдена"));
@@ -76,7 +81,7 @@ public class LoginCourierTest {
 
         courierClient.loginCourier(CourierCredentials.from(secondCourier))
                 .assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .and()
                 .assertThat()
                 .body("message",is("Недостаточно данных для входа"));
@@ -85,8 +90,6 @@ public class LoginCourierTest {
                 .assertThat()
                 .body("id",notNullValue())
                 .extract().path("id");
-
-        courierClient.deleteCourier(courierId);
     }
 
     @Test
@@ -100,7 +103,7 @@ public class LoginCourierTest {
 
         courierClient.loginCourier(CourierCredentials.from(secondCourier))
                 .assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .and()
                 .assertThat()
                 .body("message",is("Недостаточно данных для входа"));
@@ -109,8 +112,6 @@ public class LoginCourierTest {
                 .assertThat()
                 .body("id",notNullValue())
                 .extract().path("id");
-
-        courierClient.deleteCourier(courierId);
     }
 
     @Test
@@ -124,7 +125,7 @@ public class LoginCourierTest {
 
         courierClient.loginCourier(CourierCredentials.from(secondCourier))
                 .assertThat()
-                .statusCode(404)
+                .statusCode(SC_NOT_FOUND)
                 .and()
                 .assertThat()
                 .body("message",is("Учетная запись не найдена"));
@@ -133,8 +134,6 @@ public class LoginCourierTest {
                 .assertThat()
                 .body("id",notNullValue())
                 .extract().path("id");
-
-        courierClient.deleteCourier(courierId);
     }
 
     @Test
@@ -148,7 +147,7 @@ public class LoginCourierTest {
 
         courierClient.loginCourier(CourierCredentials.from(secondCourier))
                 .assertThat()
-                .statusCode(404)
+                .statusCode(SC_NOT_FOUND)
                 .and()
                 .assertThat()
                 .body("message",is("Учетная запись не найдена"));
@@ -157,7 +156,5 @@ public class LoginCourierTest {
                 .assertThat()
                 .body("id",notNullValue())
                 .extract().path("id");
-
-        courierClient.deleteCourier(courierId);
     }
 }

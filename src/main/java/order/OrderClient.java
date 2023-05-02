@@ -1,12 +1,12 @@
 package order;
 
-import courier.Constants;
+import courier.RestClient;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class OrderClient extends Constants {
+public class OrderClient extends RestClient {
     private static final String CREATE_ORDER_URI="http://qa-scooter.praktikum-services.ru/api/v1/orders";
     private static final String CANCEL_ORDER_URI="http://qa-scooter.praktikum-services.ru/api/v1/orders/cancel";
     @Step("Create order")

@@ -7,10 +7,12 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -28,6 +30,11 @@ public class CreateCourierNegativeTest {
         courierClient=new CourierClient();
     }
 
+    @After
+    public void clearData(){
+        courierClient.deleteCourier(courierId);
+    }
+
     @Test
     @DisplayName("Create duplicate courier")
     @Description("Checking of status code 409 and error message when creating duplicate courier")
@@ -42,12 +49,10 @@ public class CreateCourierNegativeTest {
 
         courierClient.createCourier(courier)
                 .assertThat()
-                .statusCode(409)
+                .statusCode(SC_CONFLICT)
                 .and()
                 .assertThat()
                 .body("message",is("Этот логин уже используется"));
-
-        courierClient.deleteCourier(courierId);
     }
 
     @Test
@@ -58,7 +63,7 @@ public class CreateCourierNegativeTest {
 
         courierClient.createCourier(courier)
                 .assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .and()
                 .assertThat()
                 .body("message",is("Недостаточно данных для создания учетной записи"));
@@ -72,7 +77,7 @@ public class CreateCourierNegativeTest {
 
         courierClient.createCourier(courier)
                 .assertThat()
-                .statusCode(400)
+                .statusCode(SC_BAD_REQUEST)
                 .and()
                 .assertThat()
                 .body("message",is("Недостаточно данных для создания учетной записи"));
